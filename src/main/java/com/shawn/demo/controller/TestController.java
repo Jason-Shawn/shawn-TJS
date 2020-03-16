@@ -96,26 +96,14 @@ public class TestController {
     }
     @PostMapping("/trains")
     public Integer trains(@RequestBody Schedule schedule){
+
         String[] departures1 = schedule.getDeparture();
         String[] arrivals1 = schedule.getArrival();
-        List<String> arrival = new ArrayList<>();
-        List<String> departure = new ArrayList<>();
-        for (String s : departures1) {
-                String replace = s.replace(":", "");
-                departure.add(replace);
-        }
-        for (String s : arrivals1) {
-                String replace = s.replace(":", "");
-                arrival.add(replace);
-        }
         int n = schedule.getArrival().length;
         List<Train> trainList = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            String[] arrivals = arrival.toArray(new String[arrival.size()]);
-            //String[] arrivals = arrival.get(i).split(":");
-            String[] departures = departure.toArray(new String[departure.size()]);
-
-            //String[] departures = departure.get(i).split(":");
+            String[] arrivals = arrivals1[i].split(":");
+            String[] departures = departures1[i].split(":");
             trainList.add(new Train(Integer.parseInt(arrivals[0])* 60 + Integer.parseInt(arrivals[1])
                     , Integer.parseInt(departures[0]) * 60 + Integer.parseInt(departures[1])));
         }
