@@ -7,12 +7,12 @@ import java.util.*;
 
 @RestController
 public class TestController {
-    private static Map<Object, Object> mapPool = new HashMap<>();
+    private static volatile Map<Object, Object> mapPool = new HashMap<>();
 
 
 
     @RequestMapping(value = "/linked")
-    public Result Linked(List<Node> nodes){
+    public Result linked(List<Node> nodes){
         int n = nodes.size();
         Set<Node> set = new HashSet<>();
         for (Node node : nodes) {
@@ -21,7 +21,7 @@ public class TestController {
                 if (set.contains(node)) {
                     return new Result(true, node);
                 } else {
-                    set.add(node);
+                    set.add(nodes.get(parentPos));
                 }
             }
         }
@@ -29,7 +29,7 @@ public class TestController {
         return new Result(false, null);
     }
     @PostMapping(value = "/students")
-    public String[] Students(@RequestBody int[] params){
+    public String[] students(@RequestBody int[] params){
         String[] i = new String[params.length];
         System.out.println(params);
         for (int j=0;j<params.length ; j++) {
@@ -51,17 +51,15 @@ public class TestController {
 
     @RequestMapping(value = "/pool/{key}",method = RequestMethod.GET)
     public Object poolGet(@RequestParam String key){
-        Object o = mapPool.get(key);
-        if (o != null) {
-            return o;
+        if (mapPool.containsKey(key)) {
+            return mapPool.get(key);
         }
         return "404";
     }
 
     @RequestMapping(value = "/pool/{key}",method = RequestMethod.DELETE)
     public Object poolDel(@RequestParam String key){
-        Object o = mapPool.get(key);
-        if (o != null) {
+        if (mapPool.containsKey(key)) {
             mapPool.remove(key);
             return "202";
         }
