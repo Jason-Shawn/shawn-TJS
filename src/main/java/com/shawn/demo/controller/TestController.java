@@ -50,7 +50,7 @@ public class TestController {
     }
 
     @RequestMapping(value = "/pool/{key}",method = RequestMethod.GET)
-    public Object poolGet(@RequestParam String key){
+    public Object poolGet(@PathVariable String key){
         if (mapPool.containsKey(key)) {
             return mapPool.get(key);
         }
@@ -58,7 +58,7 @@ public class TestController {
     }
 
     @RequestMapping(value = "/pool/{key}",method = RequestMethod.DELETE)
-    public Object poolDel(@RequestParam String key){
+    public Object poolDel(@PathVariable String key){
         if (mapPool.containsKey(key)) {
             mapPool.remove(key);
             return "202";
